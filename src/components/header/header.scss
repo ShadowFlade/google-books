@@ -1,0 +1,18 @@
+.header {
+  background: url('./books-pic.jpg') center / cover;
+  height: 40vh;
+
+  &__title {
+    color: purple;
+  }
+  &__content {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  &__input-container {
+    input {
+      width: 300px;
+    }
+  }
+}
