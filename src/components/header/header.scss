@@ -1,18 +1,40 @@
+$mt: 1.5rem;
 .header {
   background: url('./books-pic.jpg') center / cover;
   height: 40vh;
-
-  &__title {
-    color: purple;
+  &__inner {
+    display: flex;
   }
   &__content {
+    display: inline-block;
     max-width: 1000px;
     margin: 0 auto;
     text-align: center;
+    padding: 2rem 5rem;
   }
-  &__input-container {
-    input {
-      width: 300px;
-    }
+  &__title {
+    color: white;
+    font-size: 2.5rem;
+  }
+  &__search {
+    margin-top: $mt;
+  }
+  &__options {
+    display: flex;
+    justify-content: space-between;
+    margin-top: $mt;
+  }
+  &__option {
+    display: flex;
+    align-items: center;
+  }
+  &__option-value {
+    padding: 3px 5px;
+    background-color: white;
+  }
+  &__option-name {
+    margin-right: 1rem;
+    color: white;
+    font-weight: 600;
   }
 }

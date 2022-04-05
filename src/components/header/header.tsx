@@ -3,7 +3,9 @@ import * as ReactDOM from 'react-dom';
 import './header.scss';
 import '../search-field/search-field.scss';
 import SearchField from '../search-field/search-field';
+import SearchItem from '../search-item/search-item';
 const Header = () => {
+  let numberOfResult = 0;
   return (
     <header className="header">
       <div className="header__inner">
@@ -14,10 +16,51 @@ const Header = () => {
           </div>
           <div className="header__options">
             <div className="header__option">
-              <span></span>
+              <span className="header__option-name">Categories</span>
+              <select className="header__option-value" name="categories" id="categories">
+                <option className="header__item" value="all">
+                  all
+                </option>
+                <option className="header__item" value="history">
+                  history
+                </option>
+                <option className="header__item" value="fiction">
+                  fiction
+                </option>
+                <option className="header__item" value="non-fiction">
+                  non-fiction
+                </option>
+                <option className="header__item" value="science literature">
+                  science literature
+                </option>
+              </select>
             </div>
             <div className="header__option">
-              <span></span>
+              <span className="header__option-name">Sotring by</span>
+              <select className="header__option-value" name="sort" id="sort">
+                <option value="relevance" className="header__sort">
+                  relevance
+                </option>
+                <option value="date" className="header__sort">
+                  date
+                </option>
+                <option value="author" className="header__sort">
+                  author
+                </option>
+                <option value="publisher" className="header__sort">
+                  publisher
+                </option>
+              </select>
+            </div>
+          </div>
+          <div className="search-result">
+            <div className="search-result__inner">
+              <h2 className="search-result__title">
+                Found {numberOfResult} {numberOfResult > 0 ? 'results' : 'result'}
+              </h2>
+            </div>
+            <div className="search-result__content">
+              <SearchItem />
             </div>
           </div>
         </div>

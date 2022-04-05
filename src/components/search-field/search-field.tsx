@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import './search-field';
+import './search-field.scss';
 import SearchIcon from './search-icon.svg';
 
 const SearchField = () => {

@@ -35,15 +35,7 @@ const config = {
       {
         test: /\.svg$/,
         exclude: /node_modules/,
-        use: [
-          // {
-          //   loader: require.resolve('file-loader'),
-          //   options: {
-          //     exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
-          //   },
-          // },
-          '@svgr/webpack',
-        ],
+        use: ['@svgr/webpack'],
       },
       {
         test: /\.tsx?$/,
