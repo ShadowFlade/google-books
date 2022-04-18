@@ -1,0 +1,26 @@
+.book-item {
+  $fieldMargin: 1rem;
+  $textColor: #978f8f;
+  padding: 1rem 0.7rem 0.5rem 0.7rem;
+  background-color: #f1f1f1;
+
+  &__pic {
+    padding: 0 14%;
+    img {
+      width: 100%;
+    }
+  }
+  &__category {
+    margin-top: $fieldMargin;
+    color: $textColor;
+    text-decoration: underline;
+  }
+  &__title {
+    margin-top: $fieldMargin;
+    font-weight: bold;
+  }
+  &__author {
+    margin-top: $fieldMargin;
+    color: $textColor;
+  }
+}

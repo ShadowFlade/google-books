@@ -2,9 +2,8 @@ $mt: 1.5rem;
 .header {
   background: url('./books-pic.jpg') center / cover;
   height: 40vh;
-  &__inner {
-    display: flex;
-  }
+  display: flex;
+
   &__content {
     display: inline-block;
     max-width: 1000px;
@@ -27,11 +26,17 @@ $mt: 1.5rem;
   &__option {
     display: flex;
     align-items: center;
+    margin-left: 1rem;
+    &:first-child {
+      margin-left: 0;
+    }
   }
   &__option-value {
     padding: 3px 5px;
     background-color: white;
+    width: 10rem;
   }
+
   &__option-name {
     margin-right: 1rem;
     color: white;

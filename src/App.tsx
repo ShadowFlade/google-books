@@ -1,15 +1,20 @@
 import * as React from 'react';
 import { Component } from 'react';
+import Header from './components/header/header';
+import SearchResult from './components/search-result/search-result';
 import './App.scss';
 import '../nullstyle.css';
-import Layout from './layout/layout';
 interface IAppProps {
   title: string;
 }
-class App extends Component {
-  render() {
-    return <Layout></Layout>;
-  }
-}
+const App = () => {
+  let numberOfResults = 1;
+  return (
+    <div className="page">
+      <Header></Header>
+      <SearchResult numberOfResults={numberOfResults}></SearchResult>
+    </div>
+  );
+};
 
 export default App;

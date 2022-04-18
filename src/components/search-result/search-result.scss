@@ -1,0 +1,22 @@
+.search-result {
+  &__title {
+    margin: 0 auto;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 1.5rem auto;
+  }
+  &__item {
+    margin-left: 2rem;
+    &:last-child {
+      margin-left: 0.5rem;
+    }
+  }
+  &__content {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__item {
+    flex-basis: 23%;
+  }
+}
