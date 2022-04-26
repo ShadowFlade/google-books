@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const isDev = true;
-// const isProd = !isDev;
+const isProd = !isDev;
 const paths = {
   src: path.resolve(__dirname, 'src'),
   dist: path.resolve(__dirname, 'dist'),
@@ -60,16 +60,6 @@ const config = {
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
-            options: {
-              // modules: true,
-              importLoaders: 1,
-              // import: true,
-              // ...(isDev
-              //   ? {
-              //       localIdentName: '[path]_[name]_[local]',
-              //     }
-              //   : {}),
-            },
           },
           'postcss-loader',
           {
@@ -107,6 +97,10 @@ const config = {
       cleanAfterEveryBuildPatterns: ['dist'],
     }),
     new MiniCssExtractPlugin({ filename: `${paths.assets}css/[name].[hash].css` }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
+    }),
   ],
 };
 module.exports = config;
