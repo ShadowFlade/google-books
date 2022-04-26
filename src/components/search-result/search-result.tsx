@@ -1,15 +1,23 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { nanoid } from 'nanoid';
 import BookItem from '../book-item/book-item';
 import bookCover from '../book-item/book-cover.jpg';
 import './search-result.scss';
+type Book = {
+  kind: string;
+  id: string;
+  etag: string;
+  selfLink: string;
+  volumeInfo: BookInfo;
+};
 type BookInfo = {
   categories: string[];
   title: string;
   authors: string[];
+  imageLinks: { smallThumbnail: string; thumbNail: string };
 };
-const SearchResult = ({ results }: { results: BookInfo[] }) => {
-  //TODO insert Loading instead of null
+const SearchResult = ({ results }: { results: Book[] }) => {
   const numberOfResults = results.length;
   return (
     <div className="search-result">
@@ -18,20 +26,21 @@ const SearchResult = ({ results }: { results: BookInfo[] }) => {
           Found {numberOfResults} {numberOfResults > 1 ? 'results' : 'result'}
         </h2>
         <div className="search-result__content">
-          <div className="search-result__item">
-            {results.map((item) => {
-              return (
-                <div className="search-result__item">
-                  <BookItem
-                    category={item.categories[0]}
-                    title={item.title}
-                    author={item.authors[0]}
-                    picSrc={bookCover}
-                  />
-                </div>
-              );
-            })}
-          </div>
+          {results.map((item: Book) => {
+            const book: BookInfo = item.volumeInfo;
+            console.log(book);
+
+            return (
+              <div className="search-result__item" key={nanoid()}>
+                <BookItem
+                  category={book.categories[0]}
+                  title={book.title}
+                  author={book.authors[0]}
+                  picSrc={book.imageLinks.smallThumbnail}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

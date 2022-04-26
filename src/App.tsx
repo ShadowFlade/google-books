@@ -9,10 +9,17 @@ import '../nullstyle.css';
 const App = () => {
   const [results, setResults] = useState();
   const [pickerBook, setPickedBook] = useState('book');
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <div className="page">
-      <Header></Header>
-      {results ? <SearchResult results={results}></SearchResult> : <Loading></Loading>}
+      <Header setResults={setResults} setIsLoading={setIsLoading}></Header>
+      {results ? (
+        <SearchResult results={results}></SearchResult>
+      ) : isLoading ? (
+        <Loading></Loading>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

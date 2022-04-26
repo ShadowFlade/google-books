@@ -9,12 +9,20 @@ import './header.scss';
 interface SubmitForm extends HTMLFormElement {
   searchQuery: HTMLInputElement;
 }
-const Header = () => {
+const Header = ({
+  setResults,
+  setIsLoading,
+}: {
+  setResults: React.Dispatch<React.SetStateAction<undefined>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const ref = useRef<HTMLInputElement | null>(null);
   const categoryRef = useRef<HTMLSelectElement | null>(null);
   const rootURI = 'https://www.googleapis.com/books/v1/volumes';
   const APIKey = process.env.API_KEY;
   const onSubmit: React.FormEventHandler = async (e: React.FormEvent) => {
+    setIsLoading(true);
+
     e.preventDefault();
     let params;
     if (ref.current) {
@@ -24,7 +32,11 @@ const Header = () => {
           : ''
       }&key=${APIKey}`;
     }
-    const results = await axios.get(`${rootURI}?${params}`).then((res) => res.data.items);
+    const results = await axios.get(`${rootURI}?${params}`).then(({ data }) => {
+      setIsLoading(false);
+      return data.items;
+    });
+    setResults(results);
   };
   return (
     <header className="header">
