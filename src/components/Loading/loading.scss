@@ -1,0 +1,13 @@
+.loading {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 3rem;
+  &__item {
+    padding: 1rem 0.7rem 0.5rem 0.7rem;
+    margin-left: 1.5rem;
+    height: 500px;
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}

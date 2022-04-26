@@ -22,15 +22,9 @@ const Header = () => {
         categoryRef.current && categoryRef.current.value !== 'all'
           ? `&insubject:${categoryRef.current.value}`
           : ''
-      }&orderBy=newest&key=${APIKey}`;
-      console.log('🚀 ~ file: header.tsx ~ line 30 ~ Header ~ res', params);
+      }&key=${APIKey}`;
     }
-    await axios
-      .get(`${rootURI}?${params}`)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
+    const results = await axios.get(`${rootURI}?${params}`).then((res) => res.data.items);
   };
   return (
     <header className="header">
