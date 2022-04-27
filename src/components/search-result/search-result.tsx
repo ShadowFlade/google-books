@@ -33,9 +33,9 @@ const SearchResult = ({ results }: { results: Book[] }) => {
             return (
               <div className="search-result__item" key={nanoid()}>
                 <BookItem
-                  category={book.categories[0]}
+                  category={book.categories ? book.categories[0] : ''}
                   title={book.title}
-                  author={book.authors[0]}
+                  author={book.authors ? book.authors[0] : ''}
                   picSrc={book.imageLinks.smallThumbnail}
                 />
               </div>
