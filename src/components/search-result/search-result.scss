@@ -17,4 +17,15 @@
   &__item {
     flex-basis: 23%;
   }
+  &__load-more {
+    display: flex;
+    justify-content: center;
+  }
+  &__load-button {
+    width: 7rem;
+    height: 3.5rem;
+    background-color: pink;
+    border-radius: 20px;
+    box-shadow: 0 0 15px 0;
+  }
 }

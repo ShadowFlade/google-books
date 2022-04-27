@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid';
 import BookItem from '../book-item/book-item';
 import bookCover from '../book-item/book-cover.jpg';
 import './search-result.scss';
+import { FindBooksProps } from '../../App';
 type Book = {
   kind: string;
   id: string;
@@ -19,7 +20,13 @@ type BookInfo = {
   description: string;
   publishedDate: string;
 };
-const SearchResult = ({ results }: { results: Book[] }) => {
+type SearchResultProps = {
+  results: Book[];
+  queryIndex: number;
+  loadMore: (props: FindBooksProps) => Promise<Book[]>;
+  setResults: React.Dispatch<React.SetStateAction<Book[] | []>>;
+};
+const SearchResult = ({ results, loadMore, queryIndex, setResults }: SearchResultProps) => {
   const numberOfResults = results.length;
   return (
     <div className="search-result">
@@ -36,11 +43,31 @@ const SearchResult = ({ results }: { results: Book[] }) => {
                   category={book.categories ? book.categories[0] : ''}
                   title={book.title}
                   author={book.authors ? book.authors[0] : ''}
-                  picSrc={book.imageLinks.smallThumbnail}
+                  picSrc={
+                    book.imageLinks
+                      ? book.imageLinks.smallThumbnail || book.imageLinks.thumbNail
+                      : ''
+                  }
                 />
               </div>
             );
           })}
+        </div>
+        <div className="search-result__load-more">
+          <button
+            onClick={async () => {
+              const newResults = await loadMore({
+                category: localStorage.getItem('category')!,
+                query: localStorage.getItem('query')!,
+                queryIndex,
+              });
+
+              setResults((prev) => [...prev, ...newResults]);
+            }}
+            className="search-result__load-button"
+          >
+            Load more
+          </button>
         </div>
       </div>
     </div>

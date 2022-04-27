@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom';
 import axios, { AxiosResponse } from 'axios';
 import SearchField from '../search-field/search-field';
 import { BookInfo, Book } from '../search-result/search-result';
+import { FindBooksProps } from '../../App';
 import '../search-field/search-field.scss';
 import './header.scss';
 
@@ -14,9 +15,13 @@ const Header = ({
   results,
   setResults,
   setIsLoading,
+  findBooks,
+  queryIndex,
 }: {
-  results: Book[] | undefined;
+  results: Book[] | [];
+  findBooks: (props: FindBooksProps) => Promise<Book[]>;
   setResults: React.Dispatch<React.SetStateAction<undefined | Book[]>>;
+  queryIndex: number;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [query, setQuery] = useState('');
@@ -26,14 +31,16 @@ const Header = ({
     'authors',
     'description',
   ];
+  const inputFieldRef = useRef<HTMLInputElement | null>(null);
+  const sortRef = useRef<HTMLSelectElement | null>(null);
+  const categoryRef = useRef<HTMLSelectElement | null>(null);
+
   const sortByRelevance = (arr: Book[]) => {
     const sort = (bookInfo: BookInfo): number => {
       let result: number;
       relevanceTree.forEach((relevantItem) => {
         const key = bookInfo[relevantItem];
-        console.log(key, query);
         if ((Array.isArray(key) || typeof key === 'string') && key.includes(query)) {
-          console.log('includes');
           result = relevanceTree.length - relevanceTree.indexOf(relevantItem);
         }
       });
@@ -51,8 +58,6 @@ const Header = ({
     );
   };
   const toggleSort = (value: string) => {
-    // console.log('START', results);
-
     if (results && sortRef.current) {
       if (value === 'relevance') {
         setResults((prev: Book[]) => sortByDate(prev));
@@ -60,37 +65,24 @@ const Header = ({
         setResults((prev: Book[]) => sortByDate(prev));
       }
     }
-    // console.log('END', results);
   };
-  const ref = useRef<HTMLInputElement | null>(null);
-  const sortRef = useRef<HTMLSelectElement | null>(null);
-  const categoryRef = useRef<HTMLSelectElement | null>(null);
-  const rootURI = 'https://www.googleapis.com/books/v1/volumes';
-  const APIKey = process.env.API_KEY;
+  if (inputFieldRef.current) {
+  }
+
   const onSubmit: React.FormEventHandler = async (e: React.FormEvent) => {
     setIsLoading(true);
-
     e.preventDefault();
-    let params;
-    let query: string;
-    if (ref.current) {
-      query = ref.current.value;
-      params = `q=${query}${
-        categoryRef.current && categoryRef.current.value !== 'all'
-          ? `&insubject:${categoryRef.current.value}&maxResults=30`
-          : '&maxResults=30'
-      }&key=${APIKey}`;
-    }
-    let results = await axios.get(`${rootURI}?${params}`).then(({ data }) => {
-      setIsLoading(false);
-      return data.items;
+    let newResults = await findBooks({
+      category: categoryRef.current ? categoryRef.current.value : '',
+      query: inputFieldRef.current ? inputFieldRef.current.value : '',
+      queryIndex,
     });
-    console.log('🚀 ~ file: header.tsx ~ line 83 ~ results ~ results', results);
-
     if (sortRef.current) {
-      results =
-        sortRef.current.value === 'relevance' ? sortByRelevance(results) : sortByDate(results);
-      setResults(results);
+      newResults =
+        sortRef.current.value === 'relevance'
+          ? sortByRelevance(newResults)
+          : sortByDate(newResults);
+      setResults((prev) => prev?.concat(newResults));
     }
   };
   return (
@@ -98,7 +90,7 @@ const Header = ({
       <form name="search" className="header__content" onSubmit={onSubmit}>
         <h1 className="header__title">Search for books</h1>
         <div className="header__search">
-          <SearchField onSubmit={onSubmit} setQuery={setQuery} ref={ref}></SearchField>
+          <SearchField onSubmit={onSubmit} setQuery={setQuery} ref={inputFieldRef}></SearchField>
         </div>
         <div className="header__options">
           <div className="header__option">

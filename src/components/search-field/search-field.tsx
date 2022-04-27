@@ -16,7 +16,6 @@ const SearchField = React.forwardRef<
       <input
         onChange={(e) => {
           props.setQuery(e.target.value);
-          console.log(e.target.value);
         }}
         ref={ref}
         name="search-query"
