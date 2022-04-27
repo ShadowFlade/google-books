@@ -16,6 +16,8 @@ type BookInfo = {
   title: string;
   authors: string[];
   imageLinks: { smallThumbnail: string; thumbNail: string };
+  description: string;
+  publishedDate: string;
 };
 const SearchResult = ({ results }: { results: Book[] }) => {
   const numberOfResults = results.length;
@@ -47,3 +49,4 @@ const SearchResult = ({ results }: { results: Book[] }) => {
   );
 };
 export default SearchResult;
+export { BookInfo, Book };

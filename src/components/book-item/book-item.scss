@@ -5,6 +5,7 @@
   background-color: #f1f1f1;
   &__inner {
     height: 490px;
+    width: 420px;
   }
   &__pic {
     padding: 0 14%;
@@ -17,7 +18,7 @@
   }
   &__info {
     margin-top: 2rem;
-    height: 20%;
+    height: 25%;
   }
   &__category {
     margin-top: $fieldMargin;

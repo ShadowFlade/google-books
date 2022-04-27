@@ -12,7 +12,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   return (
     <div className="page">
-      <Header setResults={setResults} setIsLoading={setIsLoading}></Header>
+      <Header results={results} setResults={setResults} setIsLoading={setIsLoading}></Header>
       {results ? (
         <SearchResult results={results}></SearchResult>
       ) : isLoading ? (
