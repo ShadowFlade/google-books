@@ -30,8 +30,6 @@ const SearchResult = ({ results }: { results: Book[] }) => {
         <div className="search-result__content">
           {results.map((item: Book) => {
             const book: BookInfo = item.volumeInfo;
-            console.log(book);
-
             return (
               <div className="search-result__item" key={nanoid()}>
                 <BookItem

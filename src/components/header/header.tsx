@@ -31,38 +31,36 @@ const Header = ({
       let result: number;
       relevanceTree.forEach((relevantItem) => {
         const key = bookInfo[relevantItem];
-        if (Array.isArray(key) && key.includes(query)) {
+        console.log(key, query);
+        if ((Array.isArray(key) || typeof key === 'string') && key.includes(query)) {
+          console.log('includes');
           result = relevanceTree.length - relevanceTree.indexOf(relevantItem);
-        } else {
-          result = 0;
         }
       });
       return result!;
     };
-    return arr.sort((a: Book, b: Book) => sort(a.volumeInfo) - sort(b.volumeInfo));
+    const intermediate = arr.slice(0);
+    return intermediate.sort((a: Book, b: Book) => sort(a.volumeInfo) - sort(b.volumeInfo));
   };
   const sortByDate = (arr: Book[]) => {
-    console.log(arr.map((item) => item.volumeInfo.publishedDate));
-    const results = arr.sort(
+    const intermediate = arr.slice(0);
+    return intermediate.sort(
       (a: Book, b: Book) =>
         new Date(a.volumeInfo.publishedDate).getTime() -
         new Date(b.volumeInfo.publishedDate).getTime()
     );
-    console.log(results.map((item) => item.volumeInfo.publishedDate));
-
-    return results;
   };
   const toggleSort = (value: string) => {
-    console.log('CHANGE', results);
+    // console.log('START', results);
 
     if (results && sortRef.current) {
-      console.log('should rearrange?');
-      value === 'relevance'
-        ? setResults((prev: Book[]) => {
-            return sortByRelevance(prev);
-          })
-        : setResults((prev: Book[]) => sortByDate(prev));
+      if (value === 'relevance') {
+        setResults((prev: Book[]) => sortByDate(prev));
+      } else {
+        setResults((prev: Book[]) => sortByDate(prev));
+      }
     }
+    // console.log('END', results);
   };
   const ref = useRef<HTMLInputElement | null>(null);
   const sortRef = useRef<HTMLSelectElement | null>(null);
