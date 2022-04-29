@@ -7,24 +7,28 @@ import { BookInfo, Book } from '../search-result/search-result';
 import { FindBooksProps } from '../../App';
 import '../search-field/search-field.scss';
 import './header.scss';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface SubmitForm extends HTMLFormElement {
   searchQuery: HTMLInputElement;
 }
 const Header = ({
-  results,
   setResults,
-  setIsLoading,
   findBooks,
+  setIsLoading,
+  results,
   queryIndex,
 }: {
-  results: Book[] | [];
   findBooks: (props: FindBooksProps) => Promise<Book[]>;
   setResults: React.Dispatch<React.SetStateAction<undefined | Book[]>>;
-  queryIndex: number;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  results: Book[] | [];
+  queryIndex: number;
 }) => {
+  const navigate = useNavigate();
   const [query, setQuery] = useState('');
+  const location = useLocation();
+  const URI = location.pathname;
   const relevanceTree: (keyof Partial<BookInfo>)[] = [
     'title',
     'categories',
@@ -70,6 +74,7 @@ const Header = ({
   }
 
   const onSubmit: React.FormEventHandler = async (e: React.FormEvent) => {
+    query.length > 1 && URI !== '/' ? navigate('/') : false;
     setIsLoading(true);
     e.preventDefault();
     let newResults = await findBooks({

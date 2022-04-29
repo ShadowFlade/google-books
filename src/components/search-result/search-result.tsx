@@ -25,9 +25,19 @@ type SearchResultProps = {
   queryIndex: number;
   loadMore: (props: FindBooksProps) => Promise<Book[]>;
   setResults: React.Dispatch<React.SetStateAction<Book[] | []>>;
+  setPickedBook: React.Dispatch<React.SetStateAction<BookInfo | undefined>>;
 };
-const SearchResult = ({ results, loadMore, queryIndex, setResults }: SearchResultProps) => {
+const SearchResult = ({
+  results,
+  queryIndex,
+  setResults,
+  setPickedBook,
+  loadMore,
+}: SearchResultProps) => {
   const numberOfResults = results.length;
+  const onClick = (book: BookInfo) => {
+    setPickedBook(book);
+  };
   return (
     <div className="search-result">
       <div className="search-result__inner">
@@ -38,14 +48,14 @@ const SearchResult = ({ results, loadMore, queryIndex, setResults }: SearchResul
           {results.map((item: Book) => {
             const book: BookInfo = item.volumeInfo;
             return (
-              <div className="search-result__item" key={nanoid()}>
+              <div className="search-result__item" onClick={() => onClick(book)} key={nanoid()}>
                 <BookItem
-                  category={book.categories ? book.categories[0] : ''}
+                  category={book.categories ? book.categories : ''}
                   title={book.title}
-                  author={book.authors ? book.authors[0] : ''}
+                  authors={book.authors ? book.authors : ''}
                   picSrc={
                     book.imageLinks
-                      ? book.imageLinks.smallThumbnail || book.imageLinks.thumbNail
+                      ? book.imageLinks.thumbNail || book.imageLinks.smallThumbnail
                       : ''
                   }
                 />
