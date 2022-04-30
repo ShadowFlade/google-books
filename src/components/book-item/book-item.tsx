@@ -11,7 +11,7 @@ type BookItemProps = {
 const BookItem = ({ picSrc, category, title, authors }: BookItemProps) => {
   const URI = title.replace(/\s/g, '');
   return (
-    <Link to={`/detailed/${URI}`} className="book-item">
+    <Link to={`detailed/${URI}`} className="book-item">
       <div className="book-item__inner">
         <div className="book-item__pic">
           <img src={picSrc || ''} alt="book cover" />

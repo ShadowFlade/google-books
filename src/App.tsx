@@ -16,21 +16,11 @@ import './App.scss';
 import '../nullstyle.css';
 import axios from 'axios';
 import DetailedPage from './components/detailed-page/detailed-page';
+import FindBookPage from './components/find-book-page/find-book-page';
+import Layout from './components/layout/layout';
 type FindBooksProps = { query: string; category: string; queryIndex: number };
 const App = () => {
-  const bookTitle = useLocation().pathname.match(/detailed\/(\w+)/g);
-  const navigate = useNavigate();
   const [results, setResults] = useState([]);
-  const getBookByURI = (URI: string, bookList: BookInfo[]) => {
-    let result = {};
-    bookList.forEach((item) => {
-      const formattedTitle = item.title.replace(/\s/g, '');
-      if (formattedTitle === URI) {
-        result = item;
-      }
-    });
-    return result;
-  };
 
   const [pickedBook, setPickedBook]: [
     undefined | BookInfo,
@@ -57,18 +47,21 @@ const App = () => {
     return results;
   };
   return (
-    <div className="page">
-      <Header
-        findBooks={findBooks}
-        results={results}
-        setResults={setResults}
-        setIsLoading={setIsLoading}
-        queryIndex={queryIndex}
-      ></Header>
-      {/* {bookTitle ? <DetailedPage {...getBookByURI(bookTitle[1], results)} /> : ''} */}
-      <Routes>
+    <Routes>
+      <Route
+        path={'/'}
+        element={
+          <Layout
+            findBooks={findBooks}
+            queryIndex={queryIndex}
+            results={results}
+            setIsLoading={setIsLoading}
+            setResults={setResults}
+          />
+        }
+      >
         <Route
-          path={'/'}
+          index
           element={
             results && results.length !== 0 ? (
               <SearchResult
@@ -85,13 +78,17 @@ const App = () => {
             )
           }
         ></Route>
-
         <Route
-          path={`/detailed/${pickedBook ? pickedBook.title.replace(/\s/g, '') : 'false'}`}
+          path={`detailed/${pickedBook ? pickedBook.title.replace(/\s/g, '') : 'false'}`}
           element={pickedBook ? <DetailedPage {...pickedBook} /> : ''}
         ></Route>
-      </Routes>
-    </div>
+        <Route
+          path={`detailed/ProNode.jsforDevelopers/`}
+          element={pickedBook ? <DetailedPage {...pickedBook} /> : ''}
+        ></Route>
+        <Route path="*" element={pickedBook ? <FindBookPage results={results} /> : ''}></Route>
+      </Route>
+    </Routes>
   );
 };
 
