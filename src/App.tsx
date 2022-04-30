@@ -21,7 +21,6 @@ import Layout from './components/layout/layout';
 type FindBooksProps = { query: string; category: string; queryIndex: number };
 const App = () => {
   const [results, setResults] = useState([]);
-
   const [pickedBook, setPickedBook]: [
     undefined | BookInfo,
     React.Dispatch<React.SetStateAction<BookInfo | undefined>>
@@ -79,14 +78,9 @@ const App = () => {
           }
         ></Route>
         <Route
-          path={`detailed/${pickedBook ? pickedBook.title.replace(/\s/g, '') : 'false'}`}
-          element={pickedBook ? <DetailedPage {...pickedBook} /> : ''}
+          path={`detailed/:id`}
+          element={pickedBook ? <DetailedPage results={results} /> : ''}
         ></Route>
-        <Route
-          path={`detailed/ProNode.jsforDevelopers/`}
-          element={pickedBook ? <DetailedPage {...pickedBook} /> : ''}
-        ></Route>
-        <Route path="*" element={pickedBook ? <FindBookPage results={results} /> : ''}></Route>
       </Route>
     </Routes>
   );
