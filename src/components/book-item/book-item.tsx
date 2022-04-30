@@ -17,11 +17,11 @@ const BookItem = ({ picSrc, category, title, authors }: BookItemProps) => {
           <img src={picSrc || ''} alt="book cover" />
         </div>
         <div className="book-item__info">
-          <div className="book-item__category">{category[0]}</div>
-          <div className="book-item__title">{title}</div>
-          <div className="book-item__author">
+          <span className="book-item__category">{category[0]}</span>
+          <h3 className="book-item__title">{title}</h3>
+          <span className="book-item__author">
             {Array.isArray(authors) ? authors.join(', ') : ''}
-          </div>
+          </span>
         </div>
       </div>
     </Link>

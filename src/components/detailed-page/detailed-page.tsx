@@ -35,13 +35,13 @@ export default function DetailedPage(props: Partial<IDetailedPageProps>) {
         </div>
         <div className="detailed-page__info">
           {' '}
-          <div className="detailed-page__categories">
+          <span className="detailed-page__categories">
             {theBook?.categories ? theBook.categories.join(', ') : ''}
-          </div>
-          <div className="detailed-page__title">{theBook?.title ? theBook.title : ''}</div>
-          <div className="detailed-page__authors">
+          </span>
+          <h3 className="detailed-page__title">{theBook?.title ? theBook.title : ''}</h3>
+          <span className="detailed-page__authors">
             {theBook?.authors ? theBook.authors.join(', ') : ''}
-          </div>
+          </span>
           <div className="detailed-page__description">
             <p>{theBook?.description}</p>
           </div>
