@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { FindBooksProps } from '../../App';
+import BookItem from '../book-item/book-item';
 import { Book, BookInfo } from '../search-result/search-result';
 import './detailed-page.scss';
 export interface IDetailedPageProps {
@@ -9,26 +12,58 @@ export interface IDetailedPageProps {
   authors: string[];
   description: string;
   results: Book[];
+  findBooks: (props?: FindBooksProps | undefined) => Promise<Book[]>;
+  setResults: React.Dispatch<React.SetStateAction<Book[] | undefined>>;
 }
 
 export default function DetailedPage(props: Partial<IDetailedPageProps>) {
   const params = useParams();
-  console.log('🚀 ~ file: detailed-page.tsx ~ line 16 ~ DetailedPage ~ params', params);
-  console.log(props.results);
-  const theBook = props.results
-    ? props.results
+  let bookTitle: string | undefined | null | RegExpMatchArray =
+    useLocation().pathname.match(/detailed\/(.+)/);
+  bookTitle = bookTitle ? bookTitle[1] : '';
+
+  const [book, setBook]: [
+    BookInfo | undefined,
+    React.Dispatch<React.SetStateAction<BookInfo | undefined>>
+  ] = useState();
+
+  React.useEffect(() => {
+    (async () => {
+      await findTheBook();
+    })();
+  }, []);
+
+  async function findTheBook() {
+    let returnBooks: Book[] | undefined | void;
+    const find = (books: Book[]) => {
+      return books
         .map((item) => item.volumeInfo)
-        .find((item) => item.title.replace(/\s/g, '') === params.id!.replace(/\s/g, ''))
-    : undefined;
+        .find((item) => {
+          const itemTitleFormatted = item.title.replace(/\s/g, '');
+          return (
+            (typeof bookTitle === 'string' &&
+              itemTitleFormatted === bookTitle.replace(/\s/g, '')) ||
+            itemTitleFormatted === bookTitle
+          );
+        });
+    };
+    if (props && props.results && props.results.length === 0 && props.findBooks) {
+      returnBooks = await props?.findBooks().then((res) => {
+        const theBook = find(res);
+        setBook(theBook);
+      });
+    } else if (props.results) {
+      setBook(find(props.results));
+    }
+  }
+
   return (
     <div className="detailed-page">
       <div className="detailed-page__inner">
         <div className="detailed-page__thumbNail">
           <img
             src={`${
-              theBook?.imageLinks
-                ? theBook.imageLinks.thumbNail || theBook.imageLinks.smallThumbnail
-                : ''
+              book?.imageLinks ? book.imageLinks.thumbNail || book.imageLinks.smallThumbnail : ''
             }`}
             alt=""
           />
@@ -36,14 +71,14 @@ export default function DetailedPage(props: Partial<IDetailedPageProps>) {
         <div className="detailed-page__info">
           {' '}
           <span className="detailed-page__categories">
-            {theBook?.categories ? theBook.categories.join(', ') : ''}
+            {book?.categories ? book.categories.join(', ') : ''}
           </span>
-          <h3 className="detailed-page__title">{theBook?.title ? theBook.title : ''}</h3>
+          <h3 className="detailed-page__title">{book?.title ? book.title : ''}</h3>
           <span className="detailed-page__authors">
-            {theBook?.authors ? theBook.authors.join(', ') : ''}
+            {book?.authors ? book.authors.join(', ') : ''}
           </span>
           <div className="detailed-page__description">
-            <p>{theBook?.description}</p>
+            <p>{book?.description}</p>
           </div>
         </div>
       </div>

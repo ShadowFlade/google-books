@@ -16,11 +16,11 @@ import './App.scss';
 import '../nullstyle.css';
 import axios from 'axios';
 import DetailedPage from './components/detailed-page/detailed-page';
-import FindBookPage from './components/find-book-page/find-book-page';
 import Layout from './components/layout/layout';
-type FindBooksProps = { query: string; category: string; queryIndex: number };
+type FindBooksProps = { query: string | null; category: string | null; queryIndex: number | null };
 const App = () => {
   const [results, setResults] = useState([]);
+  const location = useLocation();
   const [pickedBook, setPickedBook]: [
     undefined | BookInfo,
     React.Dispatch<React.SetStateAction<BookInfo | undefined>>
@@ -30,7 +30,13 @@ const App = () => {
   const rootURI = 'https://www.googleapis.com/books/v1/volumes';
   const [queryIndex, setQueryIndex] = useState(0);
 
-  const findBooks = async ({ query, category, queryIndex }: FindBooksProps): Promise<Book[]> => {
+  const findBooks = async (
+    { query, category, queryIndex }: FindBooksProps = {
+      query: localStorage.getItem('query'),
+      category: localStorage.getItem('category'),
+      queryIndex: 0,
+    }
+  ): Promise<Book[]> => {
     const params = `q=${query}${
       category && category !== 'all' ? `&insubject:${category}` : ``
     }&key=${APIKey}&maxResults=30&startIndex=${queryIndex}`;
@@ -40,49 +46,58 @@ const App = () => {
       return data.items;
     });
     setQueryIndex((prev) => prev + 30);
-    localStorage.setItem('query', query);
-    localStorage.setItem('queryIndex', String(queryIndex));
-    localStorage.setItem('category', category);
+    query ? localStorage.setItem('query', query) : false;
+    queryIndex ? localStorage.setItem('queryIndex', String(queryIndex)) : false;
+    category ? localStorage.setItem('category', category) : false;
     return results;
   };
+
   return (
-    <Routes>
-      <Route
-        path={'/'}
-        element={
-          <Layout
-            findBooks={findBooks}
-            queryIndex={queryIndex}
-            results={results}
-            setIsLoading={setIsLoading}
-            setResults={setResults}
-          />
-        }
-      >
+    <>
+      <Routes>
         <Route
-          index
+          path={'/'}
           element={
-            results && results.length !== 0 ? (
-              <SearchResult
-                queryIndex={queryIndex}
-                results={results}
-                loadMore={findBooks}
-                setResults={setResults}
-                setPickedBook={setPickedBook}
-              ></SearchResult>
-            ) : isLoading ? (
-              <Loading></Loading>
-            ) : (
-              ''
-            )
+            <Layout
+              findBooks={findBooks}
+              queryIndex={queryIndex}
+              results={results}
+              setIsLoading={setIsLoading}
+              setResults={setResults}
+            />
           }
-        ></Route>
-        <Route
-          path={`detailed/:id`}
-          element={pickedBook ? <DetailedPage results={results} /> : ''}
-        ></Route>
-      </Route>
-    </Routes>
+        >
+          <Route
+            index
+            element={
+              results && results.length !== 0 ? (
+                <SearchResult
+                  queryIndex={queryIndex}
+                  results={results}
+                  loadMore={findBooks}
+                  setResults={setResults}
+                  setPickedBook={setPickedBook}
+                ></SearchResult>
+              ) : isLoading ? (
+                <Loading></Loading>
+              ) : (
+                'Find any book you want'
+              )
+            }
+          ></Route>
+          <Route
+            path={`detailed/:id`}
+            element={
+              pickedBook ? (
+                <DetailedPage results={results} />
+              ) : (
+                <DetailedPage results={results} findBooks={findBooks} setResults={setResults} />
+              )
+            }
+          ></Route>
+        </Route>
+      </Routes>
+    </>
   );
 };
 

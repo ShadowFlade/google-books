@@ -3,7 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const isDev = true;
+const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 const paths = {
   src: path.resolve(__dirname, 'src'),
@@ -21,6 +21,7 @@ const config = {
     path: paths.dist,
     chunkFilename: '[name].bundle.js', // динамически загружаемые модули считаются chunk'ами
     filename: '[name].bundle.js',
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
@@ -29,6 +30,12 @@ const config = {
     port: 80,
     hot: true,
     open: true,
+    historyApiFallback: {
+      rewrites: [
+        { from: /./, to: '/index.html' },
+        { from: /./, to: '/index.html' },
+      ],
+    },
   },
   module: {
     rules: [
