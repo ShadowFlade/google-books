@@ -1,0 +1,12 @@
+@mixin headerInput {
+  box-shadow: 0 0 5px 2px;
+  height: 30px;
+  padding: 7px 5% 7px 3px;
+  font-size: 1.35rem;
+  &:focus {
+    border: 1px inset black;
+  }
+}
+@mixin headerInputFocus {
+  border: 1px inset black;
+}

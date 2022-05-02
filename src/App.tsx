@@ -9,7 +9,6 @@ import {
   useParams,
   useNavigate,
 } from 'react-router-dom';
-import Header from './components/header/header';
 import SearchResult, { Book, BookInfo } from './components/search-result/search-result';
 import Loading from './components/Loading/Loading';
 import './App.scss';
@@ -17,6 +16,7 @@ import '../nullstyle.css';
 import axios from 'axios';
 import DetailedPage from './components/detailed-page/detailed-page';
 import Layout from './components/layout/layout';
+import NoBooksYet from './components/no-books-yet/no-books-yet';
 type FindBooksProps = { query: string | null; category: string | null; queryIndex: number | null };
 const App = () => {
   const [results, setResults] = useState([]);
@@ -81,7 +81,7 @@ const App = () => {
               ) : isLoading ? (
                 <Loading></Loading>
               ) : (
-                'Find any book you want'
+                <NoBooksYet />
               )
             }
           ></Route>

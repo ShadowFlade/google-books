@@ -99,7 +99,6 @@ const Header = ({
         </div>
         <div className="header__options">
           <div className="header__option">
-            <span className="header__option-name">Categories</span>
             <select
               ref={categoryRef}
               className="header__option-value"
@@ -122,9 +121,9 @@ const Header = ({
                 science literature
               </option>
             </select>
+            <span className="header__option-name">Categories</span>
           </div>
           <div className="header__option">
-            <span className="header__option-name">Sorting by</span>
             <select
               ref={sortRef}
               onChange={(e) => toggleSort(e.target.value)}
@@ -139,6 +138,7 @@ const Header = ({
                 newest
               </option>
             </select>
+            <span className="header__option-name">Sorting by</span>
           </div>
         </div>
       </form>

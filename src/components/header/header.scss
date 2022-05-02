@@ -1,3 +1,5 @@
+@use 'sass:color';
+@import '../../utils/utils.scss';
 $mt: 1.5rem;
 .header {
   background: url('./books-pic.jpg') center / cover;
@@ -25,16 +27,25 @@ $mt: 1.5rem;
   }
   &__option {
     display: flex;
+    flex-flow: row-reverse;
     align-items: center;
     margin-left: 1rem;
+    font-size: 1.5rem;
     &:first-child {
       margin-left: 0;
     }
   }
   &__option-value {
-    padding: 3px 5px;
-    background-color: white;
+    @include headerInput;
+    $color: white;
+    padding: 4px 5% 4px 3px;
+    background-color: $color;
     width: 10rem;
+    &:focus + .header__option-name {
+      border-bottom: 1px solid $color;
+      padding-bottom: 1px;
+      color: color.adjust($color: $color, $blackness: 20%);
+    }
   }
 
   &__option-name {

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { FindBooksProps } from '../../App';
-import BookItem from '../book-item/book-item';
 import { Book, BookInfo } from '../search-result/search-result';
 import './detailed-page.scss';
 export interface IDetailedPageProps {
