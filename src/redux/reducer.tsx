@@ -9,14 +9,17 @@ const booksSlice = createSlice({
   },
   reducers: {
     addBook: (state, action) => {
-      state.books.push(...action.payload);
+      state.books = action.payload;
     },
     deleteBook: (state, action) => {
       state.books.filter((item) => item.id !== action.payload.id);
     },
-    // sortByRelevance: (state, sortByRelevance) => {
-    //   sortByRelevance(state);
-    // },
+    sortBooksByRelevance: (state, action) => {
+      sortByRelevance(state.books, action.payload);
+    },
+    sortBooksByDate: (state, action?) => {
+      sortByDate(state.books);
+    },
   },
 });
 
@@ -43,13 +46,11 @@ function sortByRelevance(arr: BookInfo[], query: string) {
 }
 
 function sortByDate(arr: BookInfo[]) {
-  const intermediate = arr.slice(0);
-  return intermediate.sort(
+  arr.sort(
     (a: BookInfo, b: BookInfo) =>
       new Date(a.publishedDate).getTime() - new Date(b.publishedDate).getTime()
   );
 }
 
-export const { addBook, deleteBook } = booksSlice.actions;
-export { sortByRelevance, sortByDate };
+export const { addBook, deleteBook, sortBooksByRelevance, sortBooksByDate } = booksSlice.actions;
 export default booksSlice.reducer;

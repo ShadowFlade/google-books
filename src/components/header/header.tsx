@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addBook, sortByDate, sortByRelevance } from '../../redux/reducer';
+import { addBook, sortBooksByRelevance, sortBooksByDate } from '../../redux/reducer';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import SearchField from '../search-field/search-field';
 import { BookInfo, Book } from '../search-result/search-result';
@@ -37,9 +37,9 @@ const Header = ({
   const toggleSort = (value: string) => {
     if (results && sortRef.current) {
       if (value === 'relevance') {
-        // setResults((prev: Book[]) => sortByDate(prev)); //TODO convert to reducer addBooks
+        dispatch(sortBooksByRelevance(query)); //TODO convert to reducer addBooks
       } else {
-        // setResults((prev: Book[]) => sortByDate(prev)); //TODO convert to reducer addBooks
+        dispatch(sortBooksByDate({})); //TODO convert to reducer addBooks
       }
     }
   };
@@ -52,15 +52,11 @@ const Header = ({
       query: inputFieldRef.current ? inputFieldRef.current.value : '',
       queryIndex,
     });
-
+    dispatch(addBook(newResults));
     if (sortRef.current) {
-      newResults =
-        sortRef.current.value === 'relevance'
-          ? sortByRelevance(newResults, query)
-          : sortByDate(newResults);
-      dispatch(addBook(newResults)); //TODO convert to reducer addBooks
-    } else {
-      dispatch(addBook(newResults)); //TODO convert to reducer addBooks
+      sortRef.current.value === 'relevance'
+        ? dispatch(sortBooksByRelevance(query))
+        : dispatch(sortBooksByDate({}));
     }
   };
   return (
