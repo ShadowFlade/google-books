@@ -1,25 +1,23 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import SearchResult, { Book, BookInfo } from './components/search-result/search-result';
 import Loading from './components/Loading/Loading';
-import axios from 'axios';
 import DetailedPage from './components/detailed-page/detailed-page';
 import Layout from './components/layout/layout';
 import NoBooksYet from './components/no-books-yet/no-books-yet';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState, store } from './redux';
-import './App.scss';
-import '../nullstyle.css';
+import { RootState } from './redux';
 import { FindBooksProps } from './app';
 import { setCustomAction } from './components/detailed-page/detailed';
 import { addBooks } from './redux/reducer';
+import './App.scss';
+import '../nullstyle.css';
 const App = () => {
   const results = useSelector((state: RootState) => {
-    console.log(state);
     return state.books.books.map((item) => item);
   });
-  console.log('🚀 ~ file: App.tsx ~ line 19 ~ App ~ results', results);
   const dispatch = useDispatch();
   const [pickedBook, setPickedBook]: [undefined | BookInfo, setCustomAction<BookInfo>] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +50,6 @@ const App = () => {
     });
   };
   const loadMore = async () => {
-    console.log(localStorage);
     const loadedBooks = addBooks(
       await findBooks({
         category: localStorage.getItem('category'),
@@ -60,8 +57,6 @@ const App = () => {
         query: localStorage.getItem('query'),
       })
     );
-    console.log('🚀 ~ file: App.tsx ~ line 57 ~ loadMore ~ loadedBooks', loadedBooks);
-
     dispatch(loadedBooks);
   };
   return (

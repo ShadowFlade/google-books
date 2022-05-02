@@ -36,9 +36,9 @@ const Header = ({
   const toggleSort = (value: string) => {
     if (results && sortRef.current) {
       if (value === 'relevance') {
-        dispatch(sortBooksByRelevance(query)); //TODO convert to reducer addBooks
+        dispatch(sortBooksByRelevance(query));
       } else {
-        dispatch(sortBooksByDate({})); //TODO convert to reducer addBooks
+        dispatch(sortBooksByDate({}));
       }
     }
   };
