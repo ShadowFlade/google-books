@@ -1,13 +1,8 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import './book-item.scss';
-type BookItemProps = {
-  picSrc: string;
-  category: string[] | '';
-  title: string;
-  authors: string[] | '';
-};
+import { BookItemProps } from './bookItem';
+
 const BookItem = ({ picSrc, category, title, authors }: BookItemProps) => {
   const URI = title.replace(/\s/g, '');
   return (

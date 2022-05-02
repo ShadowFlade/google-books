@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { useRef } from 'react';
-import * as ReactDOM from 'react-dom';
-import './search-field.scss';
+import { setCustomAction } from '../detailed-page/detailed';
 import SearchIcon from './search-icon.svg';
+import './search-field.scss';
 
 type SearchIcon = {
   onClick?: Event;
 };
 const SearchField = React.forwardRef<
   HTMLInputElement,
-  { onSubmit: React.FormEventHandler; setQuery: React.Dispatch<React.SetStateAction<string>> }
+  { onSubmit: React.FormEventHandler; setQuery: setCustomAction<string> }
 >((props, ref) => {
   return (
     <div className="search-field__input-container">

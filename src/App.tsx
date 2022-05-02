@@ -12,13 +12,11 @@ import { RootState, store } from './redux';
 import './App.scss';
 import '../nullstyle.css';
 import { FindBooksProps } from './app';
+import { setCustomAction } from './components/detailed-page/detailed';
 const App = () => {
   const results = useSelector((state: RootState) => state.books.books.map((item) => item));
 
-  const [pickedBook, setPickedBook]: [
-    undefined | BookInfo,
-    React.Dispatch<React.SetStateAction<BookInfo | undefined>>
-  ] = useState();
+  const [pickedBook, setPickedBook]: [undefined | BookInfo, setCustomAction<BookInfo>] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const APIKey = process.env.API_KEY;
   const rootURI = 'https://www.googleapis.com/books/v1/volumes';

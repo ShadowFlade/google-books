@@ -1,19 +1,9 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { FindBooksProps } from '../../App';
-import { Book, BookInfo } from '../search-result/search-result';
+import { BookInfo } from '../search-result/search-result';
+import { IDetailedPageProps, setCustomAction } from './detailed';
 import './detailed-page.scss';
-export interface IDetailedPageProps {
-  imageLinks: { thumbNail: string; smallThumbnail: string };
-  title: string;
-  categories: string[];
-  authors: string[];
-  description: string;
-  results: BookInfo[];
-  findBooks: (props?: FindBooksProps | undefined) => Promise<BookInfo[]>;
-  setResults: React.Dispatch<React.SetStateAction<Book[] | undefined>>;
-}
 
 export default function DetailedPage(props: Partial<IDetailedPageProps>) {
   const params = useParams();
@@ -21,10 +11,7 @@ export default function DetailedPage(props: Partial<IDetailedPageProps>) {
     useLocation().pathname.match(/detailed\/(.+)/);
   bookTitle = bookTitle ? bookTitle[1] : '';
 
-  const [book, setBook]: [
-    BookInfo | undefined,
-    React.Dispatch<React.SetStateAction<BookInfo | undefined>>
-  ] = useState();
+  const [book, setBook]: [BookInfo | undefined, setCustomAction<BookInfo>] = useState();
 
   React.useEffect(() => {
     (async () => {
