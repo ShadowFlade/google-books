@@ -1,78 +1,48 @@
-import { useRef, useState } from 'react';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import axios, { AxiosResponse } from 'axios';
+import { useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addBook, sortByDate, sortByRelevance } from '../../redux/reducer';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 import SearchField from '../search-field/search-field';
 import { BookInfo, Book } from '../search-result/search-result';
 import { FindBooksProps } from '../../App';
+import { RootState } from '../../redux/index';
 import '../search-field/search-field.scss';
 import './header.scss';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 interface SubmitForm extends HTMLFormElement {
   searchQuery: HTMLInputElement;
 }
 const Header = ({
-  setResults,
   findBooks,
   setIsLoading,
-  results,
   queryIndex,
 }: {
-  findBooks: (props: FindBooksProps) => Promise<Book[]>;
-  setResults: React.Dispatch<React.SetStateAction<undefined | Book[]>>;
+  findBooks: (props: FindBooksProps) => Promise<BookInfo[]>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  results: Book[] | [];
   queryIndex: number;
 }) => {
+  const results = useSelector((state: RootState) => state.books.books);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const location = useLocation();
   const URI = location.pathname;
-  const relevanceTree: (keyof Partial<BookInfo>)[] = [
-    'title',
-    'categories',
-    'authors',
-    'description',
-  ];
+
   const inputFieldRef = useRef<HTMLInputElement | null>(null);
   const sortRef = useRef<HTMLSelectElement | null>(null);
   const categoryRef = useRef<HTMLSelectElement | null>(null);
 
-  const sortByRelevance = (arr: Book[]) => {
-    const sort = (bookInfo: BookInfo): number => {
-      let result: number;
-      relevanceTree.forEach((relevantItem) => {
-        const key = bookInfo[relevantItem];
-        if ((Array.isArray(key) || typeof key === 'string') && key.includes(query)) {
-          result = relevanceTree.length - relevanceTree.indexOf(relevantItem);
-        }
-      });
-      return result!;
-    };
-    const intermediate = arr.slice(0);
-    return intermediate.sort((a: Book, b: Book) => sort(a.volumeInfo) - sort(b.volumeInfo));
-  };
-  const sortByDate = (arr: Book[]) => {
-    const intermediate = arr.slice(0);
-    return intermediate.sort(
-      (a: Book, b: Book) =>
-        new Date(a.volumeInfo.publishedDate).getTime() -
-        new Date(b.volumeInfo.publishedDate).getTime()
-    );
-  };
   const toggleSort = (value: string) => {
     if (results && sortRef.current) {
       if (value === 'relevance') {
-        setResults((prev: Book[]) => sortByDate(prev));
+        // setResults((prev: Book[]) => sortByDate(prev)); //TODO convert to reducer addBooks
       } else {
-        setResults((prev: Book[]) => sortByDate(prev));
+        // setResults((prev: Book[]) => sortByDate(prev)); //TODO convert to reducer addBooks
       }
     }
   };
-  if (inputFieldRef.current) {
-  }
-
   const onSubmit: React.FormEventHandler = async (e: React.FormEvent) => {
     query.length > 1 && URI !== '/' ? navigate('/') : false;
     setIsLoading(true);
@@ -82,12 +52,15 @@ const Header = ({
       query: inputFieldRef.current ? inputFieldRef.current.value : '',
       queryIndex,
     });
+
     if (sortRef.current) {
       newResults =
         sortRef.current.value === 'relevance'
-          ? sortByRelevance(newResults)
+          ? sortByRelevance(newResults, query)
           : sortByDate(newResults);
-      setResults((prev) => prev?.concat(newResults));
+      dispatch(addBook(newResults)); //TODO convert to reducer addBooks
+    } else {
+      dispatch(addBook(newResults)); //TODO convert to reducer addBooks
     }
   };
   return (

@@ -10,8 +10,8 @@ export interface IDetailedPageProps {
   categories: string[];
   authors: string[];
   description: string;
-  results: Book[];
-  findBooks: (props?: FindBooksProps | undefined) => Promise<Book[]>;
+  results: BookInfo[];
+  findBooks: (props?: FindBooksProps | undefined) => Promise<BookInfo[]>;
   setResults: React.Dispatch<React.SetStateAction<Book[] | undefined>>;
 }
 
@@ -33,18 +33,15 @@ export default function DetailedPage(props: Partial<IDetailedPageProps>) {
   }, []);
 
   async function findTheBook() {
-    let returnBooks: Book[] | undefined | void;
-    const find = (books: Book[]) => {
-      return books
-        .map((item) => item.volumeInfo)
-        .find((item) => {
-          const itemTitleFormatted = item.title.replace(/\s/g, '');
-          return (
-            (typeof bookTitle === 'string' &&
-              itemTitleFormatted === bookTitle.replace(/\s/g, '')) ||
-            itemTitleFormatted === bookTitle
-          );
-        });
+    let returnBooks: BookInfo[] | undefined | void;
+    const find = (books: BookInfo[]) => {
+      return books.find((item) => {
+        const itemTitleFormatted = item.title.replace(/\s/g, '');
+        return (
+          (typeof bookTitle === 'string' && itemTitleFormatted === bookTitle.replace(/\s/g, '')) ||
+          itemTitleFormatted === bookTitle
+        );
+      });
     };
     if (props && props.results && props.results.length === 0 && props.findBooks) {
       returnBooks = await props?.findBooks().then((res) => {

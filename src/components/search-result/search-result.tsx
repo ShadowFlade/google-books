@@ -1,39 +1,16 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { nanoid } from 'nanoid';
 import BookItem from '../book-item/book-item';
-import bookCover from '../book-item/book-cover.jpg';
+import { Book, BookInfo, SearchResultProps } from './search-results';
+import { RootState } from '../../redux/index';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { useDispatch } from 'react-redux';
+import { addBook } from '../../redux/reducer';
 import './search-result.scss';
-import { FindBooksProps } from '../../App';
-type Book = {
-  kind: string;
-  id: string;
-  etag: string;
-  selfLink: string;
-  volumeInfo: BookInfo;
-};
-type BookInfo = {
-  categories: string[];
-  title: string;
-  authors: string[];
-  imageLinks: { smallThumbnail: string; thumbNail: string };
-  description: string;
-  publishedDate: string;
-};
-type SearchResultProps = {
-  results: Book[];
-  queryIndex: number;
-  loadMore: (props: FindBooksProps) => Promise<Book[]>;
-  setResults: React.Dispatch<React.SetStateAction<Book[] | []>>;
-  setPickedBook: React.Dispatch<React.SetStateAction<BookInfo | undefined>>;
-};
-const SearchResult = ({
-  results,
-  queryIndex,
-  setResults,
-  setPickedBook,
-  loadMore,
-}: SearchResultProps) => {
+
+const SearchResult = ({ queryIndex, setPickedBook, loadMore }: SearchResultProps) => {
+  const results = useSelector((state: RootState) => state.books.books);
+  const dispatch = useDispatch();
   const numberOfResults = results.length;
   const onClick = (book: BookInfo) => {
     setPickedBook(book);
@@ -45,17 +22,16 @@ const SearchResult = ({
           Found {numberOfResults} {numberOfResults > 1 ? 'results' : 'result'}
         </h2>
         <div className="search-result__content">
-          {results.map((item: Book) => {
-            const book: BookInfo = item.volumeInfo;
+          {results.map((item: BookInfo) => {
             return (
-              <div className="search-result__item" onClick={() => onClick(book)} key={nanoid()}>
+              <div className="search-result__item" onClick={() => onClick(item)} key={nanoid()}>
                 <BookItem
-                  category={book.categories ? book.categories : ''}
-                  title={book.title}
-                  authors={book.authors ? book.authors : ''}
+                  category={item.categories ? item.categories : ''}
+                  title={item.title}
+                  authors={item.authors ? item.authors : ''}
                   picSrc={
-                    book.imageLinks
-                      ? book.imageLinks.thumbNail || book.imageLinks.smallThumbnail
+                    item.imageLinks
+                      ? item.imageLinks.thumbNail || item.imageLinks.smallThumbnail
                       : ''
                   }
                 />
@@ -72,7 +48,7 @@ const SearchResult = ({
                 queryIndex,
               });
 
-              setResults((prev) => [...prev, ...newResults]);
+              dispatch(addBook(newResults));
             }}
             className="search-result__load-button"
           >

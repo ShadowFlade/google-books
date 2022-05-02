@@ -1,26 +1,20 @@
 import * as React from 'react';
-import { Component, useRef, useState } from 'react';
-import {
-  Router,
-  Routes,
-  Route,
-  useHref,
-  useLocation,
-  useParams,
-  useNavigate,
-} from 'react-router-dom';
+import { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import SearchResult, { Book, BookInfo } from './components/search-result/search-result';
 import Loading from './components/Loading/Loading';
-import './App.scss';
-import '../nullstyle.css';
 import axios from 'axios';
 import DetailedPage from './components/detailed-page/detailed-page';
 import Layout from './components/layout/layout';
 import NoBooksYet from './components/no-books-yet/no-books-yet';
-type FindBooksProps = { query: string | null; category: string | null; queryIndex: number | null };
+import { Provider, useSelector } from 'react-redux';
+import { RootState, store } from './redux';
+import './App.scss';
+import '../nullstyle.css';
+import { FindBooksProps } from './app';
 const App = () => {
-  const [results, setResults] = useState([]);
-  const location = useLocation();
+  const results = useSelector((state: RootState) => state.books.books.map((item) => item));
+
   const [pickedBook, setPickedBook]: [
     undefined | BookInfo,
     React.Dispatch<React.SetStateAction<BookInfo | undefined>>
@@ -36,7 +30,7 @@ const App = () => {
       category: localStorage.getItem('category'),
       queryIndex: 0,
     }
-  ): Promise<Book[]> => {
+  ): Promise<BookInfo[]> => {
     const params = `q=${query}${
       category && category !== 'all' ? `&insubject:${category}` : ``
     }&key=${APIKey}&maxResults=30&startIndex=${queryIndex}`;
@@ -49,55 +43,41 @@ const App = () => {
     query ? localStorage.setItem('query', query) : false;
     queryIndex ? localStorage.setItem('queryIndex', String(queryIndex)) : false;
     category ? localStorage.setItem('category', category) : false;
-    return results;
+    return results.map((item) => {
+      item.volumeInfo.id = item.id;
+      return item.volumeInfo;
+    });
   };
-
   return (
-    <>
-      <Routes>
+    <Routes>
+      <Route
+        path={'/'}
+        element={
+          <Layout findBooks={findBooks} queryIndex={queryIndex} setIsLoading={setIsLoading} />
+        }
+      >
         <Route
-          path={'/'}
+          index
           element={
-            <Layout
-              findBooks={findBooks}
-              queryIndex={queryIndex}
-              results={results}
-              setIsLoading={setIsLoading}
-              setResults={setResults}
-            />
+            results && results.length !== 0 ? (
+              <SearchResult
+                queryIndex={queryIndex}
+                loadMore={findBooks}
+                setPickedBook={setPickedBook}
+              ></SearchResult>
+            ) : isLoading ? (
+              <Loading></Loading>
+            ) : (
+              <NoBooksYet />
+            )
           }
-        >
-          <Route
-            index
-            element={
-              results && results.length !== 0 ? (
-                <SearchResult
-                  queryIndex={queryIndex}
-                  results={results}
-                  loadMore={findBooks}
-                  setResults={setResults}
-                  setPickedBook={setPickedBook}
-                ></SearchResult>
-              ) : isLoading ? (
-                <Loading></Loading>
-              ) : (
-                <NoBooksYet />
-              )
-            }
-          ></Route>
-          <Route
-            path={`detailed/:id`}
-            element={
-              pickedBook ? (
-                <DetailedPage results={results} />
-              ) : (
-                <DetailedPage results={results} findBooks={findBooks} setResults={setResults} />
-              )
-            }
-          ></Route>
-        </Route>
-      </Routes>
-    </>
+        ></Route>
+        <Route
+          path={`detailed/:id`}
+          element={pickedBook ? <DetailedPage /> : <DetailedPage findBooks={findBooks} />}
+        ></Route>
+      </Route>
+    </Routes>
   );
 };
 

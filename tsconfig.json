@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
+    "jsx": "react",
     "lib": ["es6", "dom", "DOM", "DOM.Iterable", "ESNext"],
     "rootDir": "src",
     "module": "es6",
@@ -10,7 +10,12 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "root/*": ["./*"]
+    }
   },
   "include": ["./src", "/react-app.d.ts", "custom.d.ts"],
   "exclude": ["node_modules"],
