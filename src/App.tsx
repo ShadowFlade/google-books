@@ -7,15 +7,20 @@ import axios from 'axios';
 import DetailedPage from './components/detailed-page/detailed-page';
 import Layout from './components/layout/layout';
 import NoBooksYet from './components/no-books-yet/no-books-yet';
-import { Provider, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState, store } from './redux';
 import './App.scss';
 import '../nullstyle.css';
 import { FindBooksProps } from './app';
 import { setCustomAction } from './components/detailed-page/detailed';
+import { addBooks } from './redux/reducer';
 const App = () => {
-  const results = useSelector((state: RootState) => state.books.books.map((item) => item));
-
+  const results = useSelector((state: RootState) => {
+    console.log(state);
+    return state.books.books.map((item) => item);
+  });
+  console.log('🚀 ~ file: App.tsx ~ line 19 ~ App ~ results', results);
+  const dispatch = useDispatch();
   const [pickedBook, setPickedBook]: [undefined | BookInfo, setCustomAction<BookInfo>] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const APIKey = process.env.API_KEY;
@@ -46,6 +51,19 @@ const App = () => {
       return item.volumeInfo;
     });
   };
+  const loadMore = async () => {
+    console.log(localStorage);
+    const loadedBooks = addBooks(
+      await findBooks({
+        category: localStorage.getItem('category'),
+        queryIndex: Number(localStorage.getItem('queryIndex')),
+        query: localStorage.getItem('query'),
+      })
+    );
+    console.log('🚀 ~ file: App.tsx ~ line 57 ~ loadMore ~ loadedBooks', loadedBooks);
+
+    dispatch(loadedBooks);
+  };
   return (
     <Routes>
       <Route
@@ -60,7 +78,7 @@ const App = () => {
             results && results.length !== 0 ? (
               <SearchResult
                 queryIndex={queryIndex}
-                loadMore={findBooks}
+                loadMore={loadMore}
                 setPickedBook={setPickedBook}
               ></SearchResult>
             ) : isLoading ? (

@@ -18,6 +18,6 @@ export type BookInfo = {
 };
 export type SearchResultProps = {
   queryIndex: number;
-  loadMore: (props: FindBooksProps) => Promise<BookInfo[]>;
+  loadMore: () => void;
   setPickedBook: React.Dispatch<React.SetStateAction<BookInfo | undefined>>;
 };

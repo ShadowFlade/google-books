@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addBook, sortBooksByRelevance, sortBooksByDate } from '../../redux/reducer';
+import { addBooks, sortBooksByRelevance, sortBooksByDate } from '../../redux/reducer';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import SearchField from '../search-field/search-field';
 import { BookInfo, Book } from '../search-result/search-result';
@@ -29,7 +29,6 @@ const Header = ({
   const [query, setQuery] = useState('');
   const location = useLocation();
   const URI = location.pathname;
-
   const inputFieldRef = useRef<HTMLInputElement | null>(null);
   const sortRef = useRef<HTMLSelectElement | null>(null);
   const categoryRef = useRef<HTMLSelectElement | null>(null);
@@ -52,7 +51,7 @@ const Header = ({
       query: inputFieldRef.current ? inputFieldRef.current.value : '',
       queryIndex,
     });
-    dispatch(addBook(newResults));
+    dispatch(addBooks(newResults));
     if (sortRef.current) {
       sortRef.current.value === 'relevance'
         ? dispatch(sortBooksByRelevance(query))

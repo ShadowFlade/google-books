@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { nanoid } from 'nanoid';
-import BookItem from '../book-item/book-item';
 import { Book, BookInfo, SearchResultProps } from './search-results';
-import { RootState } from '../../redux/index';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { useDispatch } from 'react-redux';
-import { addBook } from '../../redux/reducer';
+import { RootState } from '../../redux/index';
+import BookItem from '../book-item/book-item';
 import './search-result.scss';
 
-const SearchResult = ({ queryIndex, setPickedBook, loadMore }: SearchResultProps) => {
+const SearchResult = ({ setPickedBook, loadMore }: SearchResultProps) => {
   const results = useSelector((state: RootState) => state.books.books);
   const dispatch = useDispatch();
   const numberOfResults = results.length;
@@ -42,13 +41,7 @@ const SearchResult = ({ queryIndex, setPickedBook, loadMore }: SearchResultProps
         <div className="search-result__load-more">
           <button
             onClick={async () => {
-              const newResults = await loadMore({
-                category: localStorage.getItem('category')!,
-                query: localStorage.getItem('query')!,
-                queryIndex,
-              });
-
-              dispatch(addBook(newResults));
+              loadMore();
             }}
             className="search-result__load-button"
           >
