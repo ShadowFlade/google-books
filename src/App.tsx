@@ -85,7 +85,7 @@ const App = () => {
         ></Route>
         <Route
           path={`detailed/:id`}
-          element={pickedBook ? <DetailedPage /> : <DetailedPage findBooks={findBooks} />}
+          element={pickedBook ? <DetailedPage pickedBook={pickedBook} /> : <DetailedPage />}
         ></Route>
       </Route>
     </Routes>

@@ -1,4 +1,4 @@
-import { FindBooksProps } from '../../app';
+import { setCustomAction } from '../detailed-page/detailed';
 
 export type Book = {
   kind: string;
@@ -11,13 +11,20 @@ export type BookInfo = {
   categories: string[];
   title: string;
   authors: string[];
-  imageLinks: { smallThumbnail: string; thumbNail: string };
+  imageLinks: { smallThumbnail: string; thumbnail: string };
   description: string;
   publishedDate: string;
   id: string;
 };
+export type BookInfoLite = {
+  categories: string[];
+  title: string;
+  authors: string[];
+  imageLinks: { smallThumbnail: string; thumbnail: string };
+  description: string;
+};
 export type SearchResultProps = {
   queryIndex: number;
   loadMore: () => void;
-  setPickedBook: React.Dispatch<React.SetStateAction<BookInfo | undefined>>;
+  setPickedBook: setCustomAction<BookInfo>;
 };

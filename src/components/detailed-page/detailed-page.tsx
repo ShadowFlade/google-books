@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { BookInfo } from '../search-result/search-result';
+import { BookInfoLite } from '../search-result/search-results';
 import { IDetailedPageProps, setCustomAction } from './detailed';
 import './detailed-page.scss';
 
@@ -11,7 +12,10 @@ export default function DetailedPage(props: Partial<IDetailedPageProps>) {
     useLocation().pathname.match(/detailed\/(.+)/);
   bookTitle = bookTitle ? bookTitle[1] : '';
 
-  const [book, setBook]: [BookInfo | undefined, setCustomAction<BookInfo>] = useState();
+  const [book, setBook]: [
+    BookInfo | BookInfoLite | undefined,
+    setCustomAction<BookInfo | BookInfoLite>
+  ] = useState();
 
   React.useEffect(() => {
     (async () => {
@@ -30,13 +34,21 @@ export default function DetailedPage(props: Partial<IDetailedPageProps>) {
         );
       });
     };
-    if (props && props.results && props.results.length === 0 && props.findBooks) {
-      returnBooks = await props?.findBooks().then((res) => {
-        const theBook = find(res);
-        setBook(theBook);
-      });
-    } else if (props.results) {
-      setBook(find(props.results));
+    if (props.pickedBook) {
+      setBook(props.pickedBook);
+    } else {
+      const theBook: BookInfoLite = {
+        categories: localStorage.getItem('selectedBookCategories')?.split(', ') || [],
+        authors: localStorage.getItem('selectedBookAuthors')?.split(', ') || [],
+        title: localStorage.getItem('selectedBookTitle') || '',
+        imageLinks: {
+          thumbnail: localStorage.getItem('selectedBookThumbnail') || '',
+          smallThumbnail: localStorage.getItem('selectedBookSmallThumbnail') || '',
+        },
+        description: localStorage.getItem('selectedBookDescription') || '',
+      };
+
+      setBook(theBook);
     }
   }
 
@@ -46,7 +58,7 @@ export default function DetailedPage(props: Partial<IDetailedPageProps>) {
         <div className="detailed-page__thumbNail">
           <img
             src={`${
-              book?.imageLinks ? book.imageLinks.thumbNail || book.imageLinks.smallThumbnail : ''
+              book?.imageLinks ? book.imageLinks.thumbnail || book.imageLinks.smallThumbnail : ''
             }`}
             alt=""
           />

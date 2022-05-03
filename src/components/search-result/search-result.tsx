@@ -11,7 +11,13 @@ const SearchResult = ({ setPickedBook, loadMore }: SearchResultProps) => {
   const results = useSelector((state: RootState) => state.books.books);
   const dispatch = useDispatch();
   const numberOfResults = results.length;
-  const onClick = (book: BookInfo) => {
+  const selectBook = (book: BookInfo) => {
+    localStorage.setItem('selectedBookCategories', book.categories.join(', '));
+    localStorage.setItem('selectedBookAuthors', book.authors.join(', '));
+    localStorage.setItem('selectedBookTitle', book.title);
+    localStorage.setItem('selectedBookSmallThumbnail', book.imageLinks.smallThumbnail);
+    localStorage.setItem('selectedBookThumbnail', book.imageLinks.thumbnail);
+    localStorage.setItem('selectedBookDescription', book.description);
     setPickedBook(book);
   };
   return (
@@ -23,14 +29,14 @@ const SearchResult = ({ setPickedBook, loadMore }: SearchResultProps) => {
         <div className="search-result__content">
           {results.map((item: BookInfo) => {
             return (
-              <div className="search-result__item" onClick={() => onClick(item)} key={nanoid()}>
+              <div className="search-result__item" onClick={() => selectBook(item)} key={nanoid()}>
                 <BookItem
                   category={item.categories ? item.categories : ''}
                   title={item.title}
                   authors={item.authors ? item.authors : ''}
                   picSrc={
                     item.imageLinks
-                      ? item.imageLinks.thumbNail || item.imageLinks.smallThumbnail
+                      ? item.imageLinks.thumbnail || item.imageLinks.smallThumbnail
                       : ''
                   }
                 />
