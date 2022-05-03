@@ -9,7 +9,6 @@ import './search-result.scss';
 
 const SearchResult = ({ setPickedBook, loadMore }: SearchResultProps) => {
   const results = useSelector((state: RootState) => state.books.books);
-  const dispatch = useDispatch();
   const numberOfResults = results.length;
   const selectBook = (book: BookInfo) => {
     localStorage.setItem('selectedBookCategories', book.categories.join(', '));
@@ -28,6 +27,7 @@ const SearchResult = ({ setPickedBook, loadMore }: SearchResultProps) => {
         </h2>
         <div className="search-result__content">
           {results.map((item: BookInfo) => {
+            console.log(item);
             return (
               <div className="search-result__item" onClick={() => selectBook(item)} key={nanoid()}>
                 <BookItem

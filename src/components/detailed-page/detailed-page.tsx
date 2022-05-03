@@ -7,7 +7,6 @@ import { IDetailedPageProps, setCustomAction } from './detailed';
 import './detailed-page.scss';
 
 export default function DetailedPage(props: Partial<IDetailedPageProps>) {
-  const params = useParams();
   let bookTitle: string | undefined | null | RegExpMatchArray =
     useLocation().pathname.match(/detailed\/(.+)/);
   bookTitle = bookTitle ? bookTitle[1] : '';
@@ -24,7 +23,6 @@ export default function DetailedPage(props: Partial<IDetailedPageProps>) {
   }, []);
 
   async function findTheBook() {
-    let returnBooks: BookInfo[] | undefined | void;
     const find = (books: BookInfo[]) => {
       return books.find((item) => {
         const itemTitleFormatted = item.title.replace(/\s/g, '');

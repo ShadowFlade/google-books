@@ -9,7 +9,11 @@ const BookItem = ({ picSrc, category, title, authors }: BookItemProps) => {
     <Link to={`/detailed/${URI}`} state={URI} className="book-item">
       <div className="book-item__inner">
         <div className="book-item__pic">
-          <img src={picSrc || ''} alt="book cover" />
+          {picSrc ? (
+            <img src={picSrc || ''} alt="book cover" />
+          ) : (
+            'This book does not have book cover yet'
+          )}
         </div>
         <div className="book-item__info">
           <span className="book-item__category">{category[0]}</span>
