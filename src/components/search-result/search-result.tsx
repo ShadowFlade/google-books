@@ -1,10 +1,8 @@
 import * as React from 'react';
-import { nanoid } from 'nanoid';
 import { Book, BookInfo, SearchResultProps } from './search-results';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { useDispatch } from 'react-redux';
 import { RootState } from '../../redux/index';
-import BookItem from '../book-item/book-item';
+import BookInfoList from '../book-info-list/book-info-list';
 import './search-result.scss';
 
 const SearchResult = ({ setPickedBook, loadMore }: SearchResultProps) => {
@@ -26,31 +24,10 @@ const SearchResult = ({ setPickedBook, loadMore }: SearchResultProps) => {
           Found {numberOfResults} {numberOfResults > 1 ? 'results' : 'result'}
         </h2>
         <div className="search-result__content">
-          {results.map((item: BookInfo) => {
-            console.log(item);
-            return (
-              <div className="search-result__item" onClick={() => selectBook(item)} key={nanoid()}>
-                <BookItem
-                  category={item.categories ? item.categories : ''}
-                  title={item.title}
-                  authors={item.authors ? item.authors : ''}
-                  picSrc={
-                    item.imageLinks
-                      ? item.imageLinks.thumbnail || item.imageLinks.smallThumbnail
-                      : ''
-                  }
-                />
-              </div>
-            );
-          })}
+          <BookInfoList selectBook={selectBook} results={results} />
         </div>
         <div className="search-result__load-more">
-          <button
-            onClick={async () => {
-              loadMore();
-            }}
-            className="search-result__load-button"
-          >
+          <button onClick={loadMore} className="search-result__load-button">
             Load more
           </button>
         </div>

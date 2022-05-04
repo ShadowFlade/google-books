@@ -1,37 +1,24 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { BookInfo } from '../search-result/search-result';
 import { BookInfoLite } from '../search-result/search-results';
 import { IDetailedPageProps, setCustomAction } from './detailed';
 import './detailed-page.scss';
 
 export default function DetailedPage(props: Partial<IDetailedPageProps>) {
-  let bookTitle: string | undefined | null | RegExpMatchArray =
-    useLocation().pathname.match(/detailed\/(.+)/);
-  bookTitle = bookTitle ? bookTitle[1] : '';
-
   const [book, setBook]: [
     BookInfo | BookInfoLite | undefined,
     setCustomAction<BookInfo | BookInfoLite>
   ] = useState();
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       await findTheBook();
     })();
   }, []);
 
   async function findTheBook() {
-    const find = (books: BookInfo[]) => {
-      return books.find((item) => {
-        const itemTitleFormatted = item.title.replace(/\s/g, '');
-        return (
-          (typeof bookTitle === 'string' && itemTitleFormatted === bookTitle.replace(/\s/g, '')) ||
-          itemTitleFormatted === bookTitle
-        );
-      });
-    };
     if (props.pickedBook) {
       setBook(props.pickedBook);
     } else {

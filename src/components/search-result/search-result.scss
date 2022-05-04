@@ -9,13 +9,12 @@
   &__item {
     margin-left: 2rem;
     margin-top: 2rem;
+    flex-basis: 23%;
   }
   &__content {
     display: flex;
     flex-wrap: wrap;
-  }
-  &__item {
-    flex-basis: 23%;
+    justify-content: center;
   }
   &__load-more {
     display: flex;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { nanoid } from 'nanoid';
 
-import ContentLoader, { Facebook } from 'react-content-loader';
+import ContentLoader from 'react-content-loader';
 import './loading.scss';
 export default function Loading() {
   const numberOfLoadingItems = 4;

@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import './book-item.scss';
 import { BookItemProps } from './bookItem';
+import './book-item.scss';
 
 const BookItem = ({ picSrc, category, title, authors }: BookItemProps) => {
-  const URI = title.replace(/\s/g, '');
   return (
-    <Link to={`/detailed/${URI}`} state={URI} className="book-item">
+    <Link to={`/detailed/${title}`} className="book-item">
       <div className="book-item__inner">
         <div className="book-item__pic">
           {picSrc ? (
-            <img src={picSrc || ''} alt="book cover" />
+            <img src={picSrc || ''} alt="book cover" loading="lazy" decoding="async" />
           ) : (
             'This book does not have book cover yet'
           )}
