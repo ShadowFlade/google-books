@@ -1,9 +1,9 @@
 ## Refreshing pages
 
-As if right now we don't have backend, refreshing:
+For navigating between pages we use `react-router` and `react-router`, so when refreshing:
 
-- `/detailed/` page will lead to getting book data from `localStorage`
-- `/` page will lead to losing our previous results (found books)
+- `/detailed/` page we get book data from `localStorage`
+- `/` page we lose previous results (found books)
 
 ## Packages
 
