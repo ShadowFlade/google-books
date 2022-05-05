@@ -9,7 +9,7 @@ export interface IDetailedPageProps {
   authors: string[];
   description: string;
   results: BookInfo[];
-  findBooks: (props?: FindBooksProps | undefined) => Promise<BookInfo[]>;
+  fetchBooks: (props?: FindBooksProps | undefined) => Promise<BookInfo[]>;
   pickedBook: BookInfo;
 }
 export type setCustomAction<T> = React.Dispatch<React.SetStateAction<T | undefined>>;

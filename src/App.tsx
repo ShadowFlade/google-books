@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { useQuery } from 'react-query';
 import SearchResult, { Book, BookInfo } from './components/search-result/search-result';
 import Loading from './components/Loading/Loading';
 import DetailedPage from './components/detailed-page/detailed-page';
@@ -25,7 +26,7 @@ const App = () => {
   const rootURI = 'https://www.googleapis.com/books/v1/volumes';
   const [queryIndex, setQueryIndex] = useState(0);
 
-  const findBooks = async (
+  const fetchBooks = async (
     { query, category, queryIndex }: FindBooksProps = {
       query: localStorage.getItem('query'),
       category: localStorage.getItem('category'),
@@ -51,7 +52,7 @@ const App = () => {
   };
   const loadMore = async () => {
     const loadedBooks = addBooks(
-      await findBooks({
+      await fetchBooks({
         category: localStorage.getItem('category'),
         queryIndex: Number(localStorage.getItem('queryIndex')),
         query: localStorage.getItem('query'),
@@ -64,7 +65,7 @@ const App = () => {
       <Route
         path={'/'}
         element={
-          <Layout findBooks={findBooks} queryIndex={queryIndex} setIsLoading={setIsLoading} />
+          <Layout fetchBooks={fetchBooks} queryIndex={queryIndex} setIsLoading={setIsLoading} />
         }
       >
         <Route

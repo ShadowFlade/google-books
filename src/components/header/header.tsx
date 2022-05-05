@@ -15,11 +15,11 @@ interface SubmitForm extends HTMLFormElement {
   searchQuery: HTMLInputElement;
 }
 const Header = ({
-  findBooks,
+  fetchBooks,
   setIsLoading,
   queryIndex,
 }: {
-  findBooks: (props: FindBooksProps) => Promise<BookInfo[]>;
+  fetchBooks: (props: FindBooksProps) => Promise<BookInfo[]>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   queryIndex: number;
 }) => {
@@ -46,7 +46,7 @@ const Header = ({
     query.length > 1 && URI !== '/' ? navigate('/') : false;
     setIsLoading(true);
     e.preventDefault();
-    let newResults = await findBooks({
+    let newResults = await fetchBooks({
       category: categoryRef.current ? categoryRef.current.value : '',
       query: inputFieldRef.current ? inputFieldRef.current.value : '',
       queryIndex,
