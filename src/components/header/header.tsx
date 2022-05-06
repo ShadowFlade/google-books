@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addBooks, sortBooksByRelevance, sortBooksByDate } from '../../redux/reducer';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import SearchField from '../search-field/search-field';
-import { BookInfo, Book } from '../search-result/search-result';
+import { BookInfo } from '../search-result/search-result';
 import { FindBooksProps } from '../../App';
 import { RootState } from '../../redux/index';
+import { addBooks, sortBooksByRelevance, sortBooksByDate } from '../../redux/reducer';
 import '../search-field/search-field.scss';
 import './header.scss';
 

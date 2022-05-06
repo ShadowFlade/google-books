@@ -1,9 +1,8 @@
 import * as React from 'react';
+import axios from 'axios';
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-import { useQuery } from 'react-query';
 import SearchResult, { Book, BookInfo } from './components/search-result/search-result';
 import Loading from './components/Loading/Loading';
 import DetailedPage from './components/detailed-page/detailed-page';
@@ -13,6 +12,7 @@ import { RootState } from './redux';
 import { FindBooksProps } from './app';
 import { setCustomAction } from './components/detailed-page/detailed';
 import { addBooks } from './redux/reducer';
+import key from './secret';
 import './App.scss';
 import '../nullstyle.css';
 const App = () => {
@@ -22,7 +22,7 @@ const App = () => {
   const dispatch = useDispatch();
   const [pickedBook, setPickedBook]: [undefined | BookInfo, setCustomAction<BookInfo>] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const APIKey = process.env.API_KEY;
+  const APIKey = key;
   const rootURI = 'https://www.googleapis.com/books/v1/volumes';
   const [queryIndex, setQueryIndex] = useState(0);
 

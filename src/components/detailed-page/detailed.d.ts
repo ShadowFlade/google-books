@@ -1,5 +1,5 @@
-import { FindBooksProps } from '@/app';
 import * as React from 'react';
+import { FindBooksProps } from '@/app';
 import { BookInfo } from '../search-result/search-results';
 
 export interface IDetailedPageProps {

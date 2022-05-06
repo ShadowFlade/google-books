@@ -1,7 +1,7 @@
-import { nanoid } from 'nanoid';
 import * as React from 'react';
-import BookItem from '../book-item/book-item';
+import { nanoid } from 'nanoid';
 import { BookInfo } from '../search-result/search-results';
+import BookItem from '../book-item/book-item';
 
 export interface IBookInfoListProps {
   results: BookInfo[];

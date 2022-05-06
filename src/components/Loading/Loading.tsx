@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { nanoid } from 'nanoid';
-
 import ContentLoader from 'react-content-loader';
 import './loading.scss';
 export default function Loading() {

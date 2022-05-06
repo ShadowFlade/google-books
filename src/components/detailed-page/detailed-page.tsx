@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { BookInfo } from '../search-result/search-result';
 import { BookInfoLite } from '../search-result/search-results';
 import { IDetailedPageProps, setCustomAction } from './detailed';
