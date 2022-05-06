@@ -11,7 +11,7 @@ import NoBooksYet from './components/no-books-yet/no-books-yet';
 import { RootState } from './redux';
 import { FindBooksProps } from './app';
 import { setCustomAction } from './components/detailed-page/detailed';
-import { addBooks } from './redux/reducer';
+import { addBooks, setBooks } from './redux/reducer';
 import key from './secret';
 import './App.scss';
 import '../nullstyle.css';
@@ -33,6 +33,9 @@ const App = () => {
       queryIndex: 0,
     }
   ): Promise<BookInfo[]> => {
+    if (query !== localStorage.query) {
+      dispatch(setBooks([]));
+    }
     const params = `q=${query}${
       category && category !== 'all' ? `&insubject:${category}` : ``
     }&key=${APIKey}&maxResults=30&startIndex=${queryIndex}`;

@@ -8,6 +8,9 @@ const booksSlice = createSlice({
     books,
   },
   reducers: {
+    setBooks: (state, action) => {
+      state.books = action.payload;
+    },
     addBooks: (state, action) => {
       state.books.push(...action.payload);
     },
@@ -51,5 +54,6 @@ function sortByDate(arr: BookInfo[]) {
   );
 }
 
-export const { addBooks, deleteBook, sortBooksByRelevance, sortBooksByDate } = booksSlice.actions;
+export const { addBooks, deleteBook, sortBooksByRelevance, sortBooksByDate, setBooks } =
+  booksSlice.actions;
 export default booksSlice.reducer;
