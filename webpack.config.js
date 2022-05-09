@@ -7,21 +7,22 @@ const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
 const paths = {
   src: path.resolve(__dirname, 'src'),
-  dist: path.resolve(__dirname, 'dist'),
+  dist: path.resolve(__dirname, 'build'),
   assets: './assets/',
 };
-
+function publicPath() {
+  return isDev ? '/' : '/google-books/';
+}
 const config = {
   context: paths.src,
-
   entry: {
     app: './index.tsx',
   },
   output: {
     path: paths.dist,
-    chunkFilename: '[name].bundle.js', // динамически загружаемые модули считаются chunk'ами
+    chunkFilename: '[name].bundle.js',
     filename: '[name].bundle.js',
-    publicPath: '/',
+    publicPath: publicPath(),
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx'],
@@ -31,10 +32,7 @@ const config = {
     hot: true,
     open: true,
     historyApiFallback: {
-      rewrites: [
-        { from: /./, to: '/index.html' },
-        { from: /./, to: '/index.html' },
-      ],
+      rewrites: [{ from: /./, to: '/index.html' }],
     },
   },
   module: {
@@ -107,6 +105,7 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       'process.env.API_KEY': JSON.stringify(process.env.API_KEY),
+      'process.env.PUBLIC_URL': JSON.stringify(process.env.PUBLIC_URL),
     }),
   ],
 };

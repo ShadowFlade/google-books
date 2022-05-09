@@ -1,11 +1,21 @@
 {
   "name": "google-books",
   "version": "1.0.0",
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "node": true
+    }
+  },
+  "homepage": "https://shadowflade.github.io/google-books/",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development API_KEY=AIzaSyCxcxml1j0yqBnJgpCOIHYYo04GiO_Z-88 webpack serve",
-    "build": "cross-env NODE_ENV=production webpack "
+    "dev": "cross-env NODE_ENV=development webpack serve",
+    "build": "cross-env NODE_ENV=production webpack",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "just_deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "",

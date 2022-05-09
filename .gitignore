@@ -3,3 +3,4 @@ package-lock.json
 dist
 secret.tsx
 .vscode
+build
